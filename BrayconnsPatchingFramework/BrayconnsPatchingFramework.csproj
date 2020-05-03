@@ -5,8 +5,10 @@
     <LangVersion>8.0</LangVersion>
     <AssemblyTitle>BrayconnsPatchingFramework</AssemblyTitle>
     <Product>BrayconnsPatchingFramework</Product>
-    <Copyright>Copyright ©  2020</Copyright>
+    <Copyright>Copyright © Brayconn 2020</Copyright>
     <OutputPath>bin\$(Configuration)\</OutputPath>
+    <Authors>Brayconn</Authors>
+    <Company>Brayconn</Company>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>

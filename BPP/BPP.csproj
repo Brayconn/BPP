@@ -6,8 +6,11 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <AssemblyTitle>BPP</AssemblyTitle>
     <Product>BPP</Product>
-    <Copyright>Copyright ©  2020</Copyright>
+    <Copyright>Copyright © Brayconn 2020</Copyright>
     <OutputPath>bin\$(Configuration)\</OutputPath>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <Company>Brayconn</Company>
+    <Authors>Brayconn</Authors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
