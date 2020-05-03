@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "BPP": {
+      "commandName": "Project",
+      "commandLineArgs": "-h \"D:\\Brayconn\\Documents\\BoostLab_0500\\hacks\" -e \"D:\\Brayconn\\Documents\\CS Mods\\PATCHING DEMO\\Doukutsu.exe\""
+    }
+  }
+}

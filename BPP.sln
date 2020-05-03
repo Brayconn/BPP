@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29905.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BPP", "BPP\BPP.csproj", "{20485D55-E315-43BA-A168-DD2B12378D19}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrayconnsPatchingFramework", "BrayconnsPatchingFramework\BrayconnsPatchingFramework.csproj", "{11902695-380E-4DA2-8CF2-22F3B886112A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{20485D55-E315-43BA-A168-DD2B12378D19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20485D55-E315-43BA-A168-DD2B12378D19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20485D55-E315-43BA-A168-DD2B12378D19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20485D55-E315-43BA-A168-DD2B12378D19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11902695-380E-4DA2-8CF2-22F3B886112A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11902695-380E-4DA2-8CF2-22F3B886112A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11902695-380E-4DA2-8CF2-22F3B886112A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11902695-380E-4DA2-8CF2-22F3B886112A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {90A3962D-0F79-44DC-BDE4-1BC0875CE7CA}
+	EndGlobalSection
+EndGlobal

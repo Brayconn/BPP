@@ -1,0 +1,757 @@
+﻿using BPP.Properties;
+using BrayconnsPatchingFramework;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Xml.Serialization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+
+namespace BPP
+{
+    public partial class FormMain : Form
+    {
+        public FormMain(string hackFolder = null, string executable = null, ulong baseaddress = PatchApplier.DefaultBaseAddress, string loadFile = null)
+        {
+            InitializeComponent();
+            UpdateDisplayModeButtons();
+
+            HackFolder = !string.IsNullOrWhiteSpace(hackFolder) ? hackFolder : Settings.Default.HackFolder;
+            LoadHacks();
+
+            baseAddress = baseaddress;
+            if (!string.IsNullOrWhiteSpace(executable))
+                selectedEXE = executable;
+            if (!string.IsNullOrWhiteSpace(loadFile))
+                LoadPatchHistory(openedPatchHistory = loadFile);
+        }
+
+        static readonly string EXEFilter = Dialog.EXEFilter + " (*.exe)|*.exe";
+        static readonly string AllFilesFilter = Dialog.AllFilesFilter + " (*.*)|*.*";
+        static readonly string PatchHistoryFilter = Dialog.PatchHistoryFilter + " (*.ph)|*.ph";
+
+        ulong baseAddress
+        {
+            get => (ulong)baseAddressNumericUpDown.Value;
+            set => baseAddressNumericUpDown.Value = value;
+        }
+
+        string HackFolder
+        {
+            get
+            {
+                return Directory.Exists(hackDirectoryTextBox.Text) ? hackDirectoryTextBox.Text: null;
+            }
+            set
+            {
+                if(hackDirectoryTextBox.Text != value && Directory.Exists(value))
+                {
+                     Settings.Default.HackFolder = hackDirectoryTextBox.Text = value;
+                }
+            }
+        }
+        string selectedEXE
+        {
+            get
+            {
+                return File.Exists(selectedEXETextBox.Text) ? selectedEXETextBox.Text : null;
+            }
+            set
+            {
+                if (value != selectedEXETextBox.Text && File.Exists(value))
+                {
+                    selectedEXETextBox.Text = value;
+                    foreach (var hack in queuedHacks)
+                        LoadDefaultValues(hack);
+                    UpdateActionButtons();
+                    UpdateEditButtons();
+                }
+            }
+        }
+
+        IEnumerable<IHack> queuedHacks
+        {
+            get
+            {
+                foreach (var hack in queuedHacksListBox.Items)
+                    yield return hack as IHack;
+            }
+        }
+
+        IHack highlightedHack => queuedHacksListBox.SelectedItem as IHack;
+
+        private IEnumerable<HackSignature<IPatchFootprint>> QueuedHackFootprints()
+        {
+            foreach (var item in queuedHacks)
+            {
+                yield return item.ToHackHistory();
+            }
+        }
+
+        private IEnumerable<HackSignature<IPatch>> QueuedHackInfos()
+        {
+            foreach (var item in queuedHacks)
+            {
+                HackSignature<IPatch> info;
+                try
+                {
+                    info = item.ToHackInfo();
+                }
+                catch (NotSupportedException)
+                {
+                    continue;
+                }
+                yield return info;
+            }
+        }
+
+        #region Hack loading/init
+
+        readonly List<IHack> loadedHacks = new List<IHack>();
+        readonly List<string[]> hackPaths = new List<string[]>();
+
+        /// <summary>
+        /// Load all hacks from the hack folder into loadedHacks
+        /// </summary>
+        private void LoadHacks()
+        {
+            loadedHacks.Clear();
+            hackPaths.Clear();
+            if (HackFolder == null)
+                return;
+            foreach (var file in Directory.EnumerateFiles(HackFolder, "*.*", SearchOption.AllDirectories))
+            {
+                IHack hack = null;
+                switch (Path.GetExtension(file).ToLowerInvariant())
+                {
+                    case ".xml":
+                        using (StreamReader sr = new StreamReader(new FileStream(file, FileMode.Open, FileAccess.Read)))
+                        {
+                            XmlSerializer xs = new XmlSerializer(typeof(BrayconnsPatchingFramework.BoostersLab.BoostersLabHack));
+                            try
+                            {
+                                hack = (BrayconnsPatchingFramework.BoostersLab.BoostersLabHack)xs.Deserialize(sr);
+                            }
+                            catch
+                            {
+
+                            }                            
+                        }
+                        break;
+                    case ".txt":
+                        try
+                        {
+                            hack = BrayconnsPatchingFramework.HexPatch.HexPatch.Parse(file);
+                        }
+                        catch (FileLoadException)
+                        {
+
+                        }
+                        break;
+                    case ".dll":
+                        var dll = Assembly.LoadFile(file);
+                        foreach(var type in dll.GetExportedTypes())
+                        {
+                            if (typeof(IHack).IsAssignableFrom(type))
+                            {
+                                IHack instance;
+                                try
+                                {
+                                    instance = (IHack)Activator.CreateInstance(type);
+                                }
+                                catch (TypeInitializationException)
+                                {
+                                    //Unable to create instance, so I guess we just try the next one?
+                                    continue;
+                                }
+                                loadedHacks.Add(instance);
+                                hackPaths.Add(file.Replace(HackFolder + Path.DirectorySeparatorChar, null)
+                                      .Split(Path.DirectorySeparatorChar)
+                                      .Concat(new[] { type.Name })
+                                      .ToArray());
+                            }
+                        }
+                        break;
+                }
+                if (hack != null)
+                {
+                    loadedHacks.Add(hack);
+                    //this Replace() seems a little hacky, but it should be safe given the circumstances
+                    hackPaths.Add(file.Replace(HackFolder + Path.DirectorySeparatorChar,null)
+                                      .Split(Path.DirectorySeparatorChar));
+                }
+            }
+        }
+
+        void UpdateDisplayModeButtons()
+        {
+            hackNamesToolStripMenuItem.Checked = FileDisplayMode == FileDisplayModes.Name;
+            hackFilenamesToolStripMenuItem.Checked = FileDisplayMode == FileDisplayModes.Filename;
+
+            byGameToolStripMenuItem.Checked = TreeDisplayMode == TreeDisplayModes.Game;
+            byDirectoryToolStripMenuItem.Checked = TreeDisplayMode == TreeDisplayModes.Directory;
+        }
+
+        enum FileDisplayModes
+        {
+            Name,
+            Filename
+        }
+        FileDisplayModes fdm = FileDisplayModes.Filename;
+        FileDisplayModes FileDisplayMode
+        {
+            get => fdm;
+            set
+            {
+                if(fdm != value)
+                {
+                    fdm = value;
+                    UpdateDisplayModeButtons();
+                    DisplayHacks();
+                }
+            }
+        }
+        
+        enum TreeDisplayModes
+        {
+            Game,
+            Directory
+        }
+        TreeDisplayModes tdm = TreeDisplayModes.Directory;
+        TreeDisplayModes TreeDisplayMode
+        {
+            get => tdm;
+            set
+            {
+                if (tdm != value)
+                {
+                    tdm = value;
+                    UpdateDisplayModeButtons();
+                    DisplayHacks();
+                }
+            }
+        }
+
+        private void DisplayHacks()
+        {
+            availableHacksTreeView.Nodes.Clear();
+
+            for (int i = 0; i < loadedHacks.Count; i++)
+            {
+                var node = availableHacksTreeView.Nodes;
+                switch (TreeDisplayMode)
+                {
+                    case TreeDisplayModes.Game:
+                        string game = loadedHacks[i].EXE ?? Dialog.DefaultEXEDisplayName;
+                        if (!node.ContainsKey(game))
+                            node = node.Add(game, game).Nodes;
+                        else
+                            node = node[game].Nodes;
+                        break;
+                    case TreeDisplayModes.Directory:
+                        for (int j = 0; j < hackPaths[i].Length - 1; j++)
+                        {
+                            var dir = hackPaths[i][j];
+                            if (!node.ContainsKey(dir))
+                                node.Add(dir, dir);
+                            node = node[dir].Nodes;
+                        }
+                        break;
+                }
+                //TODO switch to C#8 so I can clean up this mess
+                string name = "";
+                switch (FileDisplayMode)
+                {
+                    case FileDisplayModes.Name:
+                        name = loadedHacks[i].Name;
+                        break;
+                    case FileDisplayModes.Filename:
+                        name = hackPaths[i][hackPaths[i].Length - 1];
+                        break;
+                }
+                node.Add(i.ToString(), name);
+            }
+        }
+
+        private void FormMain_Load(object sender, EventArgs e)
+        {
+            /*
+            if (string.IsNullOrWhiteSpace(HackFolder))
+            {
+                MessageBox.Show("No hack folder has been set! Forcing you to choose one now! >:3");
+                SelectHackFolder();
+            }
+            //*/
+            DisplayHacks();
+        }
+
+        void ReloadAvailableHacks()
+        {
+            //The ToArray/ToList is very important here
+            //without it, it will try to iterate through the queuedHacks list down...
+            var prevHacks = queuedHacks.Select(x => x.ToHackHistory()).ToArray();
+            queuedHacksListBox.Items.Clear();
+
+            LoadHacks();
+
+            //...here, which by this point is empty
+            RestoreQueuedHacks(prevHacks);
+            DisplayHacks();
+        }
+
+        private void refreshButton_Click(object sender, EventArgs e)
+        {
+            ReloadAvailableHacks();
+        }
+
+        #endregion
+
+        private void UpdateActionButtons()
+        {
+            var anyHacks = queuedHacks.Any();
+            var exeSelected = !string.IsNullOrWhiteSpace(selectedEXE);
+
+            saveToolStripMenuItem.Enabled = saveAsToolStripMenuItem.Enabled = anyHacks;
+            generatePatchHistoryFileToolStripMenuItem.Enabled = exeSelected;
+            if (applyButton.Enabled = undoButton.Enabled = anyHacks && exeSelected)
+            { 
+                //checking that the queued hacks list can actually be applied
+                foreach (var hack in queuedHacks)
+                {
+                    if (hack.GetType() == typeof(HackFootprint))
+                    {
+                        applyButton.Enabled = false;
+                        return;
+                    }
+                }
+            }
+        }
+
+        IHack lastCheckedHack = null;
+        private void UpdateEditButtons()
+        {
+            editHackButton.Enabled = highlightedHack is IHasEditor;
+            bool canPreview = highlightedHack != null && !string.IsNullOrWhiteSpace(selectedEXE);
+            if(canPreview && highlightedHack != lastCheckedHack)
+            {
+                lastCheckedHack = highlightedHack;
+                try
+                {
+                    canPreview = highlightedHack.ToHackInfo().Patches.Count > 0;
+                }
+                catch (NotSupportedException)
+                {
+                    canPreview = false;
+                }
+            }
+            previewButton.Enabled = canPreview;
+        }
+
+        private void availableHacksTreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            //Don't add games/folders to the list...
+            if (e.Node.Nodes.Count > 0)
+                return;
+            AddHack(e.Node);
+        }
+
+        void RemoveHack(object hack)
+        {
+            var index = queuedHacksListBox.Items.IndexOf(hack);
+            queuedHacksListBox.Items.Remove(hack);
+            queuedHacksListBox.SelectedIndex = Math.Min(index, queuedHacksListBox.Items.Count - 1);
+
+            UpdateActionButtons();
+            UpdateEditButtons();
+        }
+
+        void AddHack(TreeNode tn, int index = -1)
+        {
+            var hackToAdd = (IHack)loadedHacks[int.Parse(tn.Name)].Clone();
+            LoadDefaultValues(hackToAdd);
+            if (index < 0)
+            {
+                queuedHacksListBox.Items.Add(hackToAdd);
+            }
+            else
+            {
+                queuedHacksListBox.Items.Insert(Math.Min(index, queuedHacksListBox.Items.Count), hackToAdd);
+            }
+            UpdateActionButtons();
+            UpdateEditButtons();
+        }
+
+        private void queuedHacksListBox_SelectedValueChanged(object sender, EventArgs e)
+        {
+            selectedHackPropertyGrid.SelectedObject = queuedHacksListBox.SelectedItem;
+            UpdateEditButtons();
+        }
+
+        private void queuedHacksListBox_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            RemoveHack(queuedHacksListBox.SelectedItem);
+        }
+
+        #region Drag & Drop
+
+        bool isHolding = false;
+        int startIndex = -1;
+        int endIndex = -1;
+
+        bool IsIHack(IDataObject data)
+        {
+            return data.GetFormats().Any(x => data.GetData(x) is IHack);
+        }
+        IHack GetAsIHack(IDataObject data)
+        {
+            return data.GetFormats().Select(x => data.GetData(x) as IHack).FirstOrDefault();
+        }
+
+        private void queuedHacksListBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            var clickedIndex = queuedHacksListBox.IndexFromPoint(new Point(e.X, e.Y));
+            if (clickedIndex == -1)
+                return;
+            if (e.Button == MouseButtons.Left && !isHolding)
+            {
+                startIndex = clickedIndex;
+                isHolding = true;
+            }
+        }
+
+        private void queuedHacksListBox_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isHolding)
+            {
+                queuedHacksListBox.SelectedIndex = startIndex;
+                endIndex = queuedHacksListBox.IndexFromPoint(new Point(e.X, e.Y));
+                if (startIndex != endIndex)
+                    DoDragDrop(queuedHacksListBox.Items[startIndex], DragDropEffects.Move);
+            }
+        }
+
+        private void queuedHacksListBox_MouseUp(object sender, MouseEventArgs e)
+        {
+            isHolding = false;
+        }
+
+        private void queuedHacksListBox_DragEnter(object sender, DragEventArgs e)
+        {
+            if (IsIHack(e.Data))
+                e.Effect = DragDropEffects.Move;
+            else if (e.Data.GetDataPresent(typeof(TreeNode)))
+                e.Effect = DragDropEffects.Copy;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+        private void queuedHacksListBox_DragOver(object sender, DragEventArgs e)
+        {
+            //TODO put visual indicator of where you're going to insert
+        }
+
+        private void queuedHacksListBox_DragDrop(object sender, DragEventArgs e)
+        {
+            int GetIndex()
+            {
+                var p = queuedHacksListBox.PointToClient(new Point(e.X, e.Y));
+                int index = queuedHacksListBox.IndexFromPoint(p);
+                //default to adding to the end of the list
+                if (index < 0)
+                    index = queuedHacksListBox.Items.Count;
+                return index;
+            }
+            if (e.Data.GetDataPresent(typeof(TreeNode)) && e.AllowedEffect.HasFlag(DragDropEffects.Copy))
+            {
+                var hackToAdd = (TreeNode)e.Data.GetData(typeof(TreeNode));
+                int index = GetIndex();
+                AddHack(hackToAdd, index);
+                queuedHacksListBox.SelectedIndex = index;
+            }
+            else if (IsIHack(e.Data) && e.AllowedEffect.HasFlag(DragDropEffects.Move) && queuedHacksListBox.Items.Count > 1)
+            {
+                int index = Math.Min(queuedHacksListBox.Items.Count - 1, GetIndex());
+                var hackToMove = GetAsIHack(e.Data);
+                queuedHacksListBox.Items.Remove(hackToMove);
+                queuedHacksListBox.Items.Insert(index, hackToMove);
+
+                isHolding = false;
+                queuedHacksListBox.SelectedIndex = index;
+            }
+        }
+
+        private void availableHacksTreeView_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            var tn = (TreeNode)e.Item;
+            availableHacksTreeView.SelectedNode = tn;
+            DoDragDrop(tn, tn.Nodes.Count <= 0 ? DragDropEffects.Copy : DragDropEffects.None);
+        }
+
+        private void availableHacksTreeView_DragEnter(object sender, DragEventArgs e)
+        {
+            if (IsIHack(e.Data))
+                e.Effect = DragDropEffects.Move;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+        private void availableHacksTreeView_DragDrop(object sender, DragEventArgs e)
+        {
+            if (IsIHack(e.Data) && e.AllowedEffect.HasFlag(DragDropEffects.Move))
+            {
+                RemoveHack(GetAsIHack(e.Data));
+                isHolding = false;
+            }
+        }
+
+        #endregion
+
+        private void selectEXEButton_Click(object sender, EventArgs e)
+        {
+            using(var ofd = new OpenFileDialog()
+            {
+                Title = Dialog.SelectEXETitle,
+                Filter = string.Join("|", EXEFilter, AllFilesFilter)
+            })
+            {
+                if (ofd.ShowDialog() == DialogResult.OK)
+                    selectedEXE = ofd.FileName;
+            }
+        }
+
+        private void applyButton_Click(object sender, EventArgs e)
+        {
+            var infos = QueuedHackInfos();
+            var collisions = PatchApplier.CheckHackCollisions(infos.ToList());
+            string collisionWarningMessage = "";
+            if (collisions.Count > 0)
+            {
+                //TODO collisions shouldn't just be displayed here
+                collisionWarningMessage += Dialog.HackCollisionWarning + "\n" +
+                    string.Join("\n", collisions.Select(x => $"\"{x.Item1.Settings.Name}\" - \"{x.Item2.Settings.Name}\"")) + "\n";
+            }
+            if(MessageBox.Show(collisionWarningMessage + Dialog.GetApplyConfirmation, Dialog.WarningTitle, MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                PatchApplier.ApplyHacks(selectedEXE, infos, baseAddress);
+                string confirmationText = Dialog.ApplySuccess + "\n" +
+                    (!string.IsNullOrWhiteSpace(openedPatchHistory)
+                    ? string.Format(Dialog.SaveOffer, openedPatchHistory)
+                    : Dialog.CreateSaveOffer);
+                if (MessageBox.Show(confirmationText, this.Text, MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    saveToolStripMenuItem_Click(sender, e);
+            }
+        }
+
+        private void previewButton_Click(object sender, EventArgs e)
+        {
+            new FormDiff(selectedEXE, highlightedHack.ToHackInfo().Patches, baseAddress).ShowDialog();
+        }
+
+        private string GetOtherEXE()
+        {
+            string originalFile = "";
+            do
+            {
+                using (OpenFileDialog ofd = new OpenFileDialog()
+                {
+                    Title = Dialog.SelectOriginalEXETitle,
+                    Filter = string.Join("|", EXEFilter, AllFilesFilter)
+                })
+                {
+                    if (ofd.ShowDialog() == DialogResult.OK)
+                        originalFile = ofd.FileName;
+                    else
+                        return null;
+                }
+                if (originalFile == selectedEXE)
+                    MessageBox.Show(Dialog.InvalidOriginalEXE, Dialog.ErrorTitle);
+            }
+            while (originalFile == selectedEXE);
+            return originalFile;
+        }
+
+        private void undoButton_Click(object sender, EventArgs e)
+        {
+            string originalFile = GetOtherEXE();
+            if (string.IsNullOrWhiteSpace(originalFile))
+                return;
+            if (MessageBox.Show("Are you sure you want to undo these hacks?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                PatchApplier.UndoHacks(selectedEXE, originalFile, QueuedHackFootprints(), baseAddress);
+                MessageBox.Show("Hacks undone successfully!", this.Text);
+            }
+        }
+
+        #region Save/Save As
+        string openedPatchHistory = "";
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog sfd = new SaveFileDialog()
+            {
+                Title = Dialog.SaveTitle,
+                Filter = string.Join("|", PatchHistoryFilter, AllFilesFilter)
+            })
+            {
+                if (sfd.ShowDialog() == DialogResult.OK)
+                    openedPatchHistory = sfd.FileName;
+                else
+                    return;
+            }
+            saveToolStripMenuItem_Click(sender, e);
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(openedPatchHistory))
+                saveAsToolStripMenuItem_Click(sender, e);
+            else if (queuedHacks.Any())
+                PatchApplier.SavePatchHistory(QueuedHackFootprints(), openedPatchHistory);
+        }
+        #endregion
+
+        void LoadDefaultValues(IHack hack)
+        {
+            if (hack.WantsDefaultValues && selectedEXE != null)
+            {
+                try
+                {
+                    hack.LoadDefaultValues(selectedEXE, baseAddress);
+                }
+                catch (IOException)
+                {
+                    //ignore any IO errors just in case...
+                }
+            }
+        }
+
+        void RestoreQueuedHacks<T>(IEnumerable<HackSignature<T>> hacks) where T : IPatchFootprint
+        {
+            foreach (var appliedPatch in hacks)
+            {
+                var foundHack = loadedHacks.Where(x => x.EXE == appliedPatch.Settings.EXE
+                                                    && x.Name == appliedPatch.Settings.Name);
+
+                IHack hackToAdd = foundHack.Any()
+                    ? (IHack)foundHack.First().Clone()
+#if !CRASH_ON_UNKNOWN_HACK
+                    : HackFootprint.Create(appliedPatch);
+#else              
+                    : throw new FileNotFoundException(Dialog.UnableToLocateHack, appliedPatch.Settings.Name);
+#endif
+                hackToAdd.LoadSettings(appliedPatch.Settings);
+                LoadDefaultValues(hackToAdd);
+
+                queuedHacksListBox.Items.Add(hackToAdd);
+            }
+        }
+
+        void LoadPatchHistory(string file, bool clearQueue = true)
+        {
+            if(clearQueue)
+                queuedHacksListBox.Items.Clear();
+            var loadedHistory = PatchApplier.LoadPatchHistory(file);
+            RestoreQueuedHacks(loadedHistory);
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using(OpenFileDialog ofd = new OpenFileDialog()
+            {
+                Title = Dialog.OpenTitle,
+                Filter = string.Join("|", PatchHistoryFilter, AllFilesFilter)
+            })
+            {
+                if (ofd.ShowDialog() == DialogResult.OK)
+                    openedPatchHistory = ofd.FileName;
+                else
+                    return;
+            }
+            LoadPatchHistory(openedPatchHistory);
+        }
+
+        private void editHackButton_Click(object sender, EventArgs e)
+        {
+            if (highlightedHack is IHasEditor hh)
+            {
+                Form editor;
+#if !DEBUG
+                try
+                {
+#endif
+                    editor = hh.GetEditor();
+                    editor.Icon = this.Icon;
+#if !DEBUG
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(string.Format(Dialog.GetEditorError, ex.Message), Dialog.ErrorTitle, MessageBoxButtons.OK);
+                    return;
+                }
+#endif
+                editor.ShowDialog();
+            }
+        }
+
+        private void changeHackFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (queuedHacks.Any() &&
+                MessageBox.Show(Dialog.ChangeHackFolderConfirmation, Dialog.WarningTitle, MessageBoxButtons.YesNo) != DialogResult.Yes)
+                return;
+            using (var fbd = new FolderBrowserDialog()
+            {
+                Description = Dialog.SelectHackFolderTitle,
+                SelectedPath = HackFolder
+            })
+            {
+                if (fbd.ShowDialog() == DialogResult.OK)
+                {
+                    HackFolder = fbd.SelectedPath;
+                    Settings.Default.Save();
+                    ReloadAvailableHacks();
+                }
+            }            
+        }
+
+        private void generatePatchHistoryFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show(Dialog.GeneratePatchHistoryWarning, Dialog.WarningTitle, MessageBoxButtons.YesNo) != DialogResult.Yes)
+                return;
+            string originalFile = GetOtherEXE();
+            if (originalFile == null)
+                return;
+            using(var sfd = new SaveFileDialog()
+            {
+                Title = Dialog.GeneratePatchHistoryTitle,
+                Filter = string.Join("|", PatchHistoryFilter, AllFilesFilter)
+            })
+            {
+                if(sfd.ShowDialog() == DialogResult.OK)
+                {
+                    PatchApplier.SavePatchHistory(PatchApplier.GeneratePatchHistory(originalFile, selectedEXE), sfd.FileName);
+                    MessageBox.Show(Dialog.GeneratePatchHistorySuccess, this.Text);
+                }
+            }
+        }
+
+        private void byDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeDisplayMode = TreeDisplayModes.Directory;
+        }
+
+        private void byGameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeDisplayMode = TreeDisplayModes.Game;
+        }
+
+        private void hackNamesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FileDisplayMode = FileDisplayModes.Name;
+        }
+
+        private void hackFilenamesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FileDisplayMode = FileDisplayModes.Filename;
+        }
+    }
+}
