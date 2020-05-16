@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29905.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BPP", "BPP\BPP.csproj", "{20485D55-E315-43BA-A168-DD2B12378D19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrayconnsPatchingFramework", "BrayconnsPatchingFramework\BrayconnsPatchingFramework.csproj", "{11902695-380E-4DA2-8CF2-22F3B886112A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrayconnsPatchingFramework", "BrayconnsPatchingFramework\BrayconnsPatchingFramework.csproj", "{11902695-380E-4DA2-8CF2-22F3B886112A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
