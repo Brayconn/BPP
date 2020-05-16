@@ -7,7 +7,7 @@ namespace BrayconnsPatchingFramework.HexPatch
 {
     public class HexPatch : IHack
     {
-        readonly static Regex patchFinder = new Regex(@"(0x[A-Fa-f0-9]+)\s+((?:[A-Fa-f0-9]{2}\s+)+)", RegexOptions.Compiled | RegexOptions.Multiline);
+        readonly static Regex patchFinder = new Regex(@"(0x[A-Fa-f0-9]+)\s+((?:[A-Fa-f0-9]{2}(?:\s+|$))+)", RegexOptions.Compiled | RegexOptions.Multiline);
         public static HexPatch Parse(string filename)
         {
             var text = File.ReadAllText(filename);
