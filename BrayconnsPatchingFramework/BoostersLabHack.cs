@@ -301,7 +301,7 @@ namespace BrayconnsPatchingFramework.BoostersLab
                                 }
                                 else
                                 {
-                                    blf.DefaultData = Encoding.ASCII.GetString(br.ReadBytes(blf.Size));
+                                    blf.DefaultData = Encoding.ASCII.GetString(br.ReadBytes(blf.Size)).Replace("\0",null);
                                 }
                                 break;
                             case FIELDTYPE_FLAG:
@@ -537,7 +537,8 @@ namespace BrayconnsPatchingFramework.BoostersLab
                         switch(blf.Type)
                         {
                             case FIELDTYPE_TEXT:
-                                if(long.TryParse(blf.Data, out _))
+                                //if it's a number, it needs to be a number, otherwise just check for empty
+                                if (blf.IsNumber ? long.TryParse(blf.Data, out _) : !string.IsNullOrWhiteSpace(blf.Data))
                                     theSettings.Settings.Add(new Setting<string, object>(newChain, blf.Data));
                                 break;
                             case FIELDTYPE_FLAG:
