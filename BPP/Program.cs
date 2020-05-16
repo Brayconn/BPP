@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using CommandLine;
 
@@ -40,7 +39,7 @@ namespace BPP
                     args = new string[] { "-" + Options.ExecutableShortName, args[0] };
                 else if (Directory.Exists(args[0]))
                     args = new string[] { "-" + Options.HackFolderShortName, args[0] };
-            }
+            }            
             Parser.Default.ParseArguments<Options>(args)
                 .WithParsed(ParseSucceed)
                 .WithNotParsed(ParseError);
