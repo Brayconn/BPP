@@ -35,6 +35,7 @@ namespace BPP
                 if (File.Exists(openedPatchHistory))
                     LoadPatchHistory(openedPatchHistory);
             }
+            UpdateActionButtons();
         }
 
         static readonly string EXEFilter = Dialog.EXEFilter + " (*.exe)|*.exe";
@@ -308,6 +309,7 @@ namespace BPP
             //...here, which by this point is empty
             RestoreQueuedHacks(prevHacks);
             DisplayHacks();
+            UpdateActionButtons();
         }
 
         private void refreshButton_Click(object sender, EventArgs e)
@@ -317,6 +319,9 @@ namespace BPP
 
         #endregion
 
+        /// <summary>
+        /// Updates the Save, Save As, Generate Patch History File, Apply, and Undo buttons
+        /// </summary>
         private void UpdateActionButtons()
         {
             var anyHacks = queuedHacks.Any();
