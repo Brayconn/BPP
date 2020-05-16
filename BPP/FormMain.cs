@@ -24,8 +24,17 @@ namespace BPP
             baseAddress = baseaddress;
             if (!string.IsNullOrWhiteSpace(executable))
                 selectedEXE = executable;
+            //an attempt to validate file paths was made
+            //but it turns out that's a deep rabbit hole that I don't want to go down
             if (!string.IsNullOrWhiteSpace(loadFile))
-                LoadPatchHistory(openedPatchHistory = loadFile);
+            {
+                //setting openedPathHistory no matter what
+                //so if you use -l to open a file that doesn't exist
+                //it will offer to save it there for you when you apply
+                openedPatchHistory = loadFile;
+                if (File.Exists(openedPatchHistory))
+                    LoadPatchHistory(openedPatchHistory);
+            }
         }
 
         static readonly string EXEFilter = Dialog.EXEFilter + " (*.exe)|*.exe";
@@ -606,7 +615,16 @@ namespace BPP
             if (string.IsNullOrWhiteSpace(openedPatchHistory))
                 saveAsToolStripMenuItem_Click(sender, e);
             else if (queuedHacks.Any())
-                PatchApplier.SavePatchHistory(QueuedHackFootprints(), openedPatchHistory);
+            {
+                try
+                {
+                    PatchApplier.SavePatchHistory(QueuedHackFootprints(), openedPatchHistory);
+                }
+                catch (ArgumentException ae)
+                {
+                    MessageBox.Show(ae.Message, this.Text);
+                }
+            }
         }
         #endregion
 
