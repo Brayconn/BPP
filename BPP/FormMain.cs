@@ -36,6 +36,7 @@ namespace BPP
                     LoadPatchHistory(openedPatchHistory);
             }
             UpdateActionButtons();
+            UpdateEditButtons();
         }
 
         static readonly string EXEFilter = Dialog.EXEFilter + " (*.exe)|*.exe";
@@ -310,6 +311,7 @@ namespace BPP
             RestoreQueuedHacks(prevHacks);
             DisplayHacks();
             UpdateActionButtons();
+            UpdateEditButtons();
         }
 
         private void refreshButton_Click(object sender, EventArgs e)
