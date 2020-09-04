@@ -416,20 +416,15 @@ namespace BrayconnsPatchingFramework.BoostersLab
                         UpdateColumn(blf.Column);
                         switch(blf.Type)
                         {
-                            //TODO fix text alignment
                             case FIELDTYPE_LABEL:
-                                if (blf.Data != null)
+                                var l = new Label()
                                 {
-                                    var l = new Label()
-                                    {
-                                        //AutoSize = true,
-                                        //Margin = new Padding(0,0,0,0),
-                                        Dock = DockStyle.Fill,
-                                        TextAlign = ContentAlignment.TopCenter,
-                                        Text = blf.Data.Replace("\t", null),
-                                    };
-                                    parent.Controls.Add(l, column, GetRow());
-                                }
+                                    AutoSize = true,
+                                    Dock = DockStyle.Fill,
+                                    TextAlign = ContentAlignment.MiddleCenter,
+                                    Text = blf.Data?.Replace("\n", null).Replace("\t", null) ?? "",
+                                };
+                                parent.Controls.Add(l, column, GetRow());
                                 break;
                             //Data and info are both just displayed as text boxes
                             case FIELDTYPE_DATA:
@@ -443,7 +438,7 @@ namespace BrayconnsPatchingFramework.BoostersLab
                                     MinimumSize = new Size(200, 80),
                                     //MaximumSize = new Size(200, int.MaxValue),
                                     ReadOnly = true,
-                                    Text = blf.Data.Replace("\t", null)
+                                    Text = blf.Data?.Trim('\n').Replace("\n", Environment.NewLine).Replace("\t", null) ?? ""
                                 };
                                 parent.Controls.Add(tb, column, GetRow());
                                 break;
