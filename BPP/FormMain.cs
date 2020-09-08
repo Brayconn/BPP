@@ -430,7 +430,7 @@ namespace BPP
 
         private void queuedHacksListBox_MouseDown(object sender, MouseEventArgs e)
         {
-            var clickedIndex = queuedHacksListBox.IndexFromPoint(new Point(e.X, e.Y));
+            var clickedIndex = queuedHacksListBox.IndexFromPoint(e.Location);
             if (clickedIndex == -1)
                 return;
             if (e.Button == MouseButtons.Left && !isHolding)
@@ -445,7 +445,7 @@ namespace BPP
             if (isHolding)
             {
                 queuedHacksListBox.SelectedIndex = startIndex;
-                endIndex = queuedHacksListBox.IndexFromPoint(new Point(e.X, e.Y));
+                endIndex = queuedHacksListBox.IndexFromPoint(e.Location);
                 if (startIndex != endIndex)
                     DoDragDrop(queuedHacksListBox.Items[startIndex], DragDropEffects.Move);
             }
@@ -482,14 +482,14 @@ namespace BPP
                     index = queuedHacksListBox.Items.Count;
                 return index;
             }
-            if (e.Data.GetDataPresent(typeof(TreeNode)) && e.AllowedEffect.HasFlag(DragDropEffects.Copy))
+            if (e.Data.GetDataPresent(typeof(TreeNode)) && (e.AllowedEffect | DragDropEffects.Copy) != 0)
             {
                 var hackToAdd = (TreeNode)e.Data.GetData(typeof(TreeNode));
                 int index = GetIndex();
                 AddHack(hackToAdd, index);
                 queuedHacksListBox.SelectedIndex = index;
             }
-            else if (IsIHack(e.Data) && e.AllowedEffect.HasFlag(DragDropEffects.Move) && queuedHacksListBox.Items.Count > 1)
+            else if (IsIHack(e.Data) && (e.AllowedEffect | DragDropEffects.Move) != 0 && queuedHacksListBox.Items.Count > 1)
             {
                 int index = Math.Min(queuedHacksListBox.Items.Count - 1, GetIndex());
                 var hackToMove = GetAsIHack(e.Data);
@@ -517,7 +517,7 @@ namespace BPP
         }
         private void availableHacksTreeView_DragDrop(object sender, DragEventArgs e)
         {
-            if (IsIHack(e.Data) && e.AllowedEffect.HasFlag(DragDropEffects.Move))
+            if (IsIHack(e.Data) && (e.AllowedEffect | DragDropEffects.Move) != 0)
             {
                 RemoveHack(GetAsIHack(e.Data));
                 isHolding = false;
