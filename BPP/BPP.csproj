@@ -68,6 +68,7 @@
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
     <PackageReference Include="jacobslusser.ScintillaNET" Version="3.6.3" />
     <PackageReference Include="SharpDisasm" Version="1.1.11" />
+    <ProjectReference Include="..\..\PETools\PETools\PETools.csproj" />
     <ProjectReference Include="..\BrayconnsPatchingFramework\BrayconnsPatchingFramework.csproj" />
     <Compile Update="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>

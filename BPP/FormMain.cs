@@ -63,6 +63,8 @@ namespace BPP
                 }
             }
         }
+
+        bool allowMismatchedBaseAddress = false;
         string selectedEXE
         {
             get
@@ -73,6 +75,7 @@ namespace BPP
             {
                 if (value != selectedEXETextBox.Text && File.Exists(value))
                 {
+                    allowMismatchedBaseAddress = false;
                     selectedEXETextBox.Text = value;
                     foreach (var hack in queuedHacks)
                         LoadDefaultValues(hack);
@@ -538,6 +541,22 @@ namespace BPP
 
         private void applyButton_Click(object sender, EventArgs e)
         {
+            if(!allowMismatchedBaseAddress && PETools.PEFile.TryGetBaseAddress(selectedEXE, out ulong actualBase) && actualBase != baseAddress)
+            {
+                var res = MessageBox.Show(string.Format(Dialog.GetBaseAddressDecision, "0x" + baseAddress.ToString("X"), "0x" + actualBase.ToString("X")), Dialog.WarningTitle, MessageBoxButtons.YesNoCancel);
+                switch(res)
+                {
+                    case DialogResult.Yes:
+                        baseAddress = actualBase;
+                        break;
+                    case DialogResult.No:
+                        allowMismatchedBaseAddress = true;
+                        break;
+                    default:
+                        return;
+                }
+            }
+
             var infos = QueuedHackInfos();
             var collisions = PatchApplier.CheckHackCollisions(infos.ToList());
             string collisionWarningMessage = "";

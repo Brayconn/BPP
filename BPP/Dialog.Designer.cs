@@ -171,6 +171,16 @@ namespace BPP {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The chosen base address ({0}) does not match the one found in this executable ({1})!
+        ///Would you like to use the address found in the executable?.
+        /// </summary>
+        internal static string GetBaseAddressDecision {
+            get {
+                return ResourceManager.GetString("GetBaseAddressDecision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error while creating the editor form:
         ///{0}.
         /// </summary>

@@ -42,8 +42,10 @@ So no, your hacks are not magically expanding, it's just so you can better see w
 # Building
 It's just a regular VS2019 project, should build pretty normally.
 
+Requires my fork of the [PETools library](https://github.com/Brayconn/PETools)
+
 Uses these NuGet packages:
-- CommandLineParser - startup options
+- CommandLineParser - Parsing startup options
 - ScintillaNET - Text boxes in the preview window
 - SharpDisasm - x86 support in preview window
 
