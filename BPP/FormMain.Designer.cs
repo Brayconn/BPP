@@ -265,6 +265,7 @@
             resources.ApplyResources(this.availableHacksTreeView, "availableHacksTreeView");
             this.availableHacksTreeView.Name = "availableHacksTreeView";
             this.availableHacksTreeView.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.availableHacksTreeView_ItemDrag);
+            this.availableHacksTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.availableHacksTreeView_NodeMouseClick);
             this.availableHacksTreeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.availableHacksTreeView_NodeMouseDoubleClick);
             this.availableHacksTreeView.DragDrop += new System.Windows.Forms.DragEventHandler(this.availableHacksTreeView_DragDrop);
             this.availableHacksTreeView.DragEnter += new System.Windows.Forms.DragEventHandler(this.availableHacksTreeView_DragEnter);

@@ -121,6 +121,37 @@
     <value>17, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="menuStrip1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="menuStrip1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>800, 24</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="menuStrip1.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="menuStrip1.Text" xml:space="preserve">
+    <value>menuStrip1</value>
+  </data>
+  <data name="&gt;&gt;menuStrip1.Name" xml:space="preserve">
+    <value>menuStrip1</value>
+  </data>
+  <data name="&gt;&gt;menuStrip1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.MenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuStrip1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;menuStrip1.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="fileToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>37, 20</value>
+  </data>
+  <data name="fileToolStripMenuItem.Text" xml:space="preserve">
+    <value>File</value>
+  </data>
   <data name="openToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>225, 22</value>
   </data>
@@ -139,7 +170,6 @@
   <data name="saveAsToolStripMenuItem.Text" xml:space="preserve">
     <value>Save As...</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="generatePatchHistoryFileToolStripMenuItem.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
@@ -149,11 +179,11 @@
   <data name="generatePatchHistoryFileToolStripMenuItem.Text" xml:space="preserve">
     <value>Generate Patch History File...</value>
   </data>
-  <data name="fileToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>37, 20</value>
+  <data name="viewToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>44, 20</value>
   </data>
-  <data name="fileToolStripMenuItem.Text" xml:space="preserve">
-    <value>File</value>
+  <data name="viewToolStripMenuItem.Text" xml:space="preserve">
+    <value>View</value>
   </data>
   <data name="byGameToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>157, 22</value>
@@ -182,36 +212,6 @@
   <data name="hackFilenamesToolStripMenuItem.Text" xml:space="preserve">
     <value>Hack Filenames</value>
   </data>
-  <data name="viewToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 20</value>
-  </data>
-  <data name="viewToolStripMenuItem.Text" xml:space="preserve">
-    <value>View</value>
-  </data>
-  <data name="menuStrip1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="menuStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>800, 24</value>
-  </data>
-  <data name="menuStrip1.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="menuStrip1.Text" xml:space="preserve">
-    <value>menuStrip1</value>
-  </data>
-  <data name="&gt;&gt;menuStrip1.Name" xml:space="preserve">
-    <value>menuStrip1</value>
-  </data>
-  <data name="&gt;&gt;menuStrip1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.MenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;menuStrip1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;menuStrip1.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
   <data name="tableLayoutPanel1.ColumnCount" type="System.Int32, mscorlib">
     <value>8</value>
   </data>
@@ -226,7 +226,7 @@
     <value>3, 0</value>
   </data>
   <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>258, 20</value>
+    <value>256, 20</value>
   </data>
   <data name="label1.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -256,10 +256,10 @@
     <value>Fill</value>
   </data>
   <data name="label2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>267, 0</value>
+    <value>265, 0</value>
   </data>
   <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 20</value>
+    <value>226, 20</value>
   </data>
   <data name="label2.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -289,10 +289,10 @@
     <value>Fill</value>
   </data>
   <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>501, 0</value>
+    <value>497, 0</value>
   </data>
   <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>296, 20</value>
+    <value>300, 20</value>
   </data>
   <data name="label3.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -319,10 +319,10 @@
     <value>Fill</value>
   </data>
   <data name="queuedHacksListBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>267, 50</value>
+    <value>265, 50</value>
   </data>
   <data name="queuedHacksListBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 343</value>
+    <value>226, 343</value>
   </data>
   <data name="queuedHacksListBox.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -343,10 +343,10 @@
     <value>Fill</value>
   </data>
   <data name="selectedHackPropertyGrid.Location" type="System.Drawing.Point, System.Drawing">
-    <value>501, 50</value>
+    <value>497, 50</value>
   </data>
   <data name="selectedHackPropertyGrid.Size" type="System.Drawing.Size, System.Drawing">
-    <value>296, 343</value>
+    <value>300, 343</value>
   </data>
   <data name="selectedHackPropertyGrid.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -370,10 +370,10 @@
     <value>False</value>
   </data>
   <data name="applyButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>267, 399</value>
+    <value>265, 399</value>
   </data>
   <data name="applyButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>111, 24</value>
+    <value>110, 24</value>
   </data>
   <data name="applyButton.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -400,10 +400,10 @@
     <value>False</value>
   </data>
   <data name="undoButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>384, 399</value>
+    <value>381, 399</value>
   </data>
   <data name="undoButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>111, 24</value>
+    <value>110, 24</value>
   </data>
   <data name="undoButton.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -430,7 +430,7 @@
     <value>3, 399</value>
   </data>
   <data name="reloadButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>258, 24</value>
+    <value>256, 24</value>
   </data>
   <data name="reloadButton.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -454,10 +454,10 @@
     <value>Fill</value>
   </data>
   <data name="selectedEXETextBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>501, 23</value>
+    <value>497, 23</value>
   </data>
   <data name="selectedEXETextBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>258, 20</value>
+    <value>256, 20</value>
   </data>
   <data name="selectedEXETextBox.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
@@ -475,7 +475,7 @@
     <value>8</value>
   </data>
   <data name="chooseSelectedEXEButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>765, 23</value>
+    <value>759, 23</value>
   </data>
   <data name="chooseSelectedEXEButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>26, 21</value>
@@ -505,10 +505,10 @@
     <value>False</value>
   </data>
   <data name="previewButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>648, 399</value>
+    <value>643, 399</value>
   </data>
   <data name="previewButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 24</value>
+    <value>154, 24</value>
   </data>
   <data name="previewButton.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -535,7 +535,7 @@
     <value>3, 50</value>
   </data>
   <data name="availableHacksTreeView.Size" type="System.Drawing.Size, System.Drawing">
-    <value>258, 343</value>
+    <value>256, 343</value>
   </data>
   <data name="availableHacksTreeView.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -559,7 +559,7 @@
     <value>3, 23</value>
   </data>
   <data name="hackDirectoryTextBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 20</value>
+    <value>226, 20</value>
   </data>
   <data name="hackDirectoryTextBox.TabIndex" type="System.Int32, mscorlib">
     <value>16</value>
@@ -577,7 +577,7 @@
     <value>13</value>
   </data>
   <data name="chooseHackDirectoryButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>237, 23</value>
+    <value>235, 23</value>
   </data>
   <data name="chooseHackDirectoryButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>24, 21</value>
@@ -604,10 +604,10 @@
     <value>Fill</value>
   </data>
   <data name="baseAddressNumericUpDown.Location" type="System.Drawing.Point, System.Drawing">
-    <value>267, 23</value>
+    <value>265, 23</value>
   </data>
   <data name="baseAddressNumericUpDown.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 20</value>
+    <value>226, 20</value>
   </data>
   <data name="baseAddressNumericUpDown.TabIndex" type="System.Int32, mscorlib">
     <value>15</value>
@@ -652,16 +652,16 @@
     <value>0</value>
   </data>
   <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label1" Row="0" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="label2" Row="0" RowSpan="1" Column="2" ColumnSpan="2" /&gt;&lt;Control Name="label3" Row="0" RowSpan="1" Column="4" ColumnSpan="4" /&gt;&lt;Control Name="queuedHacksListBox" Row="2" RowSpan="1" Column="2" ColumnSpan="2" /&gt;&lt;Control Name="selectedHackPropertyGrid" Row="2" RowSpan="1" Column="4" ColumnSpan="4" /&gt;&lt;Control Name="applyButton" Row="3" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="undoButton" Row="3" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="reloadButton" Row="3" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="selectedEXETextBox" Row="1" RowSpan="1" Column="4" ColumnSpan="3" /&gt;&lt;Control Name="chooseSelectedEXEButton" Row="1" RowSpan="1" Column="7" ColumnSpan="1" /&gt;&lt;Control Name="previewButton" Row="3" RowSpan="1" Column="6" ColumnSpan="2" /&gt;&lt;Control Name="editHackButton" Row="3" RowSpan="1" Column="4" ColumnSpan="2" /&gt;&lt;Control Name="availableHacksTreeView" Row="2" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="hackDirectoryTextBox" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="chooseHackDirectoryButton" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="baseAddressNumericUpDown" Row="1" RowSpan="1" Column="2" ColumnSpan="2" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,33.34407,Absolute,30,Percent,16.66537,Percent,16.66537,Percent,16.66259,Absolute,30,Percent,16.66259,Absolute,36" /&gt;&lt;Rows Styles="Absolute,20,Absolute,27,Percent,100,Absolute,30" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label1" Row="0" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="label2" Row="0" RowSpan="1" Column="2" ColumnSpan="2" /&gt;&lt;Control Name="label3" Row="0" RowSpan="1" Column="4" ColumnSpan="4" /&gt;&lt;Control Name="queuedHacksListBox" Row="2" RowSpan="1" Column="2" ColumnSpan="2" /&gt;&lt;Control Name="selectedHackPropertyGrid" Row="2" RowSpan="1" Column="4" ColumnSpan="4" /&gt;&lt;Control Name="applyButton" Row="3" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="undoButton" Row="3" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="reloadButton" Row="3" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="selectedEXETextBox" Row="1" RowSpan="1" Column="4" ColumnSpan="3" /&gt;&lt;Control Name="chooseSelectedEXEButton" Row="1" RowSpan="1" Column="7" ColumnSpan="1" /&gt;&lt;Control Name="previewButton" Row="3" RowSpan="1" Column="6" ColumnSpan="2" /&gt;&lt;Control Name="editHackButton" Row="3" RowSpan="1" Column="4" ColumnSpan="2" /&gt;&lt;Control Name="availableHacksTreeView" Row="2" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="hackDirectoryTextBox" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="chooseHackDirectoryButton" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="baseAddressNumericUpDown" Row="1" RowSpan="1" Column="2" ColumnSpan="2" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,33.34407,Absolute,30,Percent,16.66537,Percent,16.66537,Percent,16.66259,Absolute,30,Percent,16.66259,Absolute,42" /&gt;&lt;Rows Styles="Absolute,20,Absolute,27,Percent,100,Absolute,30" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="editHackButton.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <data name="editHackButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>501, 399</value>
+    <value>497, 399</value>
   </data>
   <data name="editHackButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>141, 24</value>
+    <value>140, 24</value>
   </data>
   <data name="editHackButton.TabIndex" type="System.Int32, mscorlib">
     <value>12</value>

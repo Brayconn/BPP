@@ -125,6 +125,44 @@ namespace BPP
 
         readonly List<IHack> loadedHacks = new List<IHack>();
         readonly List<string[]> hackPaths = new List<string[]>();
+        string GetHackFullPath(int index)
+        {
+            string path = HackFolder + Path.DirectorySeparatorChar + string.Join(Path.DirectorySeparatorChar.ToString(), hackPaths[index]);
+            
+            //slightly hacky way of dealing with hacks that are inside other files.
+            //Currently only used for dll hacks, but maybe could be useful for hacks in archives?
+            while (!File.Exists(path))
+                path = Path.GetDirectoryName(path);
+
+            return path;
+        }
+        string GetHackFullPath(IHack hack)
+        {
+            var found = loadedHacks.Find(x => hack.Name == x.Name && hack.EXE == x.EXE);
+            return GetHackFullPath(loadedHacks.IndexOf(found));
+        }
+        string GetHackFullPath(TreeNode node)
+        {
+            if (node.Nodes.Count == 0)
+            {
+                return GetHackFullPath(int.Parse(node.Name));
+            }
+            else
+            {
+                var nodes = new List<string>();
+                do
+                {
+                    nodes.Add(node.Name);
+                    node = node.Parent;
+                } while (node != null) ;
+
+                var output = HackFolder;
+                for (int i = nodes.Count - 1; 0 <= i; i--)
+                    output += Path.DirectorySeparatorChar + nodes[i];
+                
+                return output;
+            }
+        }
 
         /// <summary>
         /// Load all hacks from the hack folder into loadedHacks
@@ -324,6 +362,19 @@ namespace BPP
 
         #endregion
 
+        private void ShowContextMenu(Point location, string path, bool enableOpenWith = true)
+        {
+            var cms = new ContextMenuStrip();
+            cms.Items.Add(new ToolStripMenuItem("Open", null, delegate { ShellOpener.Open(path); }));
+            
+            //TODO haven't figured out a way for Open With to work on non-windows platforms
+            if (enableOpenWith && Environment.OSVersion.Platform == PlatformID.Win32NT)
+                cms.Items.Add(new ToolStripMenuItem("Open with", null, delegate { ShellOpener.OpenFileWith(path, this.Handle); }));
+
+            cms.Items.Add(new ToolStripMenuItem("Open path", null, delegate { ShellOpener.OpenPath(path); }));
+            cms.Show(location);
+        }
+
         /// <summary>
         /// Updates the Save, Save As, Generate Patch History File, Apply, and Undo buttons
         /// </summary>
@@ -366,6 +417,17 @@ namespace BPP
                 }
             }
             previewButton.Enabled = canPreview;
+        }
+
+        private void availableHacksTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            if(e.Button == MouseButtons.Right)
+            {
+                //don't want to allow opening the context menu on games
+                if (e.Node.Nodes.Count > 0 && TreeDisplayMode == TreeDisplayModes.Game)
+                    return;
+                ShowContextMenu(availableHacksTreeView.PointToScreen(e.Location),GetHackFullPath(e.Node), e.Node.Nodes.Count == 0);
+            }
         }
 
         private void availableHacksTreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -433,10 +495,15 @@ namespace BPP
             var clickedIndex = queuedHacksListBox.IndexFromPoint(e.Location);
             if (clickedIndex == -1)
                 return;
-            if (e.Button == MouseButtons.Left && !isHolding)
+            switch (e.Button)
             {
-                startIndex = clickedIndex;
-                isHolding = true;
+                case MouseButtons.Left when !isHolding:
+                    startIndex = clickedIndex;
+                    isHolding = true;
+                    break;
+                case MouseButtons.Right:
+                    ShowContextMenu(queuedHacksListBox.PointToScreen(e.Location), GetHackFullPath(highlightedHack));
+                    break;
             }
         }
 
