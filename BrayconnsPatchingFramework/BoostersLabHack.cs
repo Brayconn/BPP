@@ -137,7 +137,7 @@ namespace BrayconnsPatchingFramework.BoostersLab
     }
 
     [XmlRoot(ElementName = NODE_HACK)]
-    public class BoostersLabHack : IHack, IHasEditor
+    public class BoostersLabHack : IHack, IHasEditor, IHasChildren
     {
         [XmlIgnore]
         bool recognizeLongs = true;
@@ -149,17 +149,17 @@ namespace BrayconnsPatchingFramework.BoostersLab
             set
             {
                 recognizeLongs = value;
-                void SetLongValue(BoostersLabPanel p)
+                void SetLongValue(object[] nodes)
                 {
-                    foreach(var node in p.Nodes)
+                    foreach(var node in Nodes)
                     {
                         if (node is BoostersLabPanel blp)
-                            SetLongValue(blp);
+                            SetLongValue(blp.Nodes);
                         else if (node is BoostersLabField blf)
                             blf.recognizeLongs = recognizeLongs;
                     }
                 }
-                SetLongValue(Panel);
+                SetLongValue(Nodes);
             }
         }
 
@@ -209,16 +209,16 @@ namespace BrayconnsPatchingFramework.BoostersLab
         
         [Browsable(false)]
         [XmlElement(ElementName = NODE_PANEL, Type = typeof(BoostersLabPanel))]
-        public BoostersLabPanel Panel { get; set; }
+        public object[] Nodes { get; set; }
         
         public object Clone()
         {
             var h = new BoostersLabHack()
             {
-               Name = Name,
-               Author = Author,
-               Game = Game,
-               Panel = (BoostersLabPanel)Panel.Clone()
+                Name = Name,
+                Author = Author,
+                Game = Game,
+                Nodes = Nodes.DeepClone()
             };
             return h;
         }
@@ -246,7 +246,7 @@ namespace BrayconnsPatchingFramework.BoostersLab
                         FixStreaking = (bool)setting.Value;
                         break;
                     default:
-                        object node = Panel;
+                        object node = this;
                         var indexes = setting.Key.Split(',')
                                                  .Where(x => int.TryParse(x, out _))
                                                  .Select(x => int.Parse(x));
@@ -265,14 +265,14 @@ namespace BrayconnsPatchingFramework.BoostersLab
         public void LoadDefaultValues(string filename, ulong baseAddress)
         {
             using var br = new BinaryReader(new FileStream(filename, FileMode.Open, FileAccess.Read));
-            void GetDefaults(BoostersLabPanel panel)
+            void GetDefaults(object[] nodes)
             {
-                if (panel?.Nodes == null)
+                if (nodes == null)
                     return;
-                foreach (var node in panel.Nodes)
+                foreach (var node in nodes)
                 {
                     if (node is BoostersLabPanel blp)
-                        GetDefaults(blp);
+                        GetDefaults(blp.Nodes);
                     else if (node is BoostersLabField blf)
                     {
                         if (!string.IsNullOrWhiteSpace(blf.Offset))
@@ -317,7 +317,7 @@ namespace BrayconnsPatchingFramework.BoostersLab
                     }
                 }
             }
-            GetDefaults(Panel);
+            GetDefaults(Nodes);
         }
         [XmlIgnore]
         [Browsable(false)]
@@ -359,9 +359,9 @@ namespace BrayconnsPatchingFramework.BoostersLab
                 RowCount = 1,
                 ColumnCount = 1,
             });
-            void AddControls(TableLayoutPanel parent, BoostersLabPanel p)
+            void AddControls(TableLayoutPanel parent, object[] nodes)
             {
-                if (p?.Nodes == null)
+                if (nodes == null)
                     return;
                 int column = 0;
                 int row = 0;
@@ -381,7 +381,7 @@ namespace BrayconnsPatchingFramework.BoostersLab
                     parent.RowCount++;
                     return row++;
                 }
-                foreach (var node in p.Nodes)
+                foreach (var node in nodes)
                 {
                     if(node is BoostersLabPanel blp)
                     {
@@ -406,7 +406,7 @@ namespace BrayconnsPatchingFramework.BoostersLab
                                 RowCount = 1,
                                 ColumnCount = 1,
                             };
-                            AddControls(flp, blp);
+                            AddControls(flp, blp.Nodes);
                             gb.Controls.Add(flp);
                         }
                         parent.Controls.Add(gb);
@@ -505,7 +505,7 @@ namespace BrayconnsPatchingFramework.BoostersLab
                     }
                 }
             }
-            AddControls((TableLayoutPanel)f.Controls[0], Panel);
+            AddControls((TableLayoutPanel)f.Controls[0], Nodes);
             f.MaximumSize = new Size(f.Controls[0].PreferredSize.Width + SystemInformation.VerticalScrollBarWidth * 3,
                                      f.Controls[0].PreferredSize.Height + SystemInformation.HorizontalScrollBarHeight * 3);
             Screen monitor = Screen.FromControl(f);
@@ -553,7 +553,7 @@ namespace BrayconnsPatchingFramework.BoostersLab
             }
             //don't need to save any settings if all that's there is default junk that's going to be overwriteen
             if(!WantsDefaultValues)
-                GetSetting(Panel.Nodes);
+                GetSetting(Nodes);
             return theSettings;
         }
 
@@ -629,7 +629,7 @@ namespace BrayconnsPatchingFramework.BoostersLab
                 }
                 return p;
             }
-            return GetPatches(Panel.Nodes).ToArray();
+            return GetPatches(Nodes).ToArray();
         }
 
         public HackSignature<IPatch> ToHackInfo()
