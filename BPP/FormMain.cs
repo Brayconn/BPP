@@ -94,7 +94,7 @@ namespace BPP
             }
         }
 
-        IHack highlightedHack => queuedHacksListBox.SelectedItem as IHack;
+        IHack highlightedHack { get => queuedHacksListBox.SelectedItem as IHack; set => queuedHacksListBox.SelectedItem = value; }
 
         private IEnumerable<HackSignature<IPatchFootprint>> QueuedHackFootprints()
         {
@@ -460,6 +460,7 @@ namespace BPP
             {
                 queuedHacksListBox.Items.Insert(Math.Min(index, queuedHacksListBox.Items.Count), hackToAdd);
             }
+            highlightedHack = hackToAdd;
             UpdateActionButtons();
             UpdateEditButtons();
         }
