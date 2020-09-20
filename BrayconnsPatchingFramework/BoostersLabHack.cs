@@ -391,8 +391,12 @@ namespace BrayconnsPatchingFramework.BoostersLab
                             Dock = DockStyle.Fill,
                             AutoSize = true,
                             AutoSizeMode = AutoSizeMode.GrowOnly,
-                            Margin = new Padding(1,1,1,1),
-                            Padding = new Padding(1,0,1,2),
+                            Margin = new Padding(0,0,0,0),
+                            Padding = new Padding(2,0,2,2),
+                            //this "removes" the extra space at the top of the group box for cases where there isn't any text
+                            Font = (string.IsNullOrWhiteSpace(blp.Title)
+                                    ? new Font(new FontFamily(System.Drawing.Text.GenericFontFamilies.Monospace), 1, GraphicsUnit.Pixel)
+                                    : Control.DefaultFont),
                             Text = blp.Title
                         };
                         if ((blp.Nodes?.Length ?? 0) > 0)
@@ -401,8 +405,6 @@ namespace BrayconnsPatchingFramework.BoostersLab
                             {
                                 AutoSize = true,
                                 Dock = DockStyle.Fill,
-                                //Margin = new Padding(1,1,1,1),
-                                //Padding = new Padding(1,1,1,1),
                                 RowCount = 1,
                                 ColumnCount = 1,
                             };
@@ -421,7 +423,9 @@ namespace BrayconnsPatchingFramework.BoostersLab
                                 {
                                     AutoSize = true,
                                     Dock = DockStyle.Fill,
+                                    Margin = new Padding(3,2,3,3), //Top & Bottom margin would be 0 without this
                                     TextAlign = ContentAlignment.MiddleCenter,
+                                    Font = Control.DefaultFont,
                                     Text = blf.Data?.Replace("\n", null).Replace("\t", null) ?? "",
                                 };
                                 parent.Controls.Add(l, column, GetRow());
@@ -429,15 +433,16 @@ namespace BrayconnsPatchingFramework.BoostersLab
                             //Data and info are both just displayed as text boxes
                             case FIELDTYPE_DATA:
                             case FIELDTYPE_INFO:
-                                var tb = new TextBox()
+                                var tb = new RichTextBox()
                                 {
                                     WordWrap = true,
                                     Multiline = true,
                                     Dock = DockStyle.Fill,
-                                    ScrollBars = ScrollBars.Vertical, //TODO maybe make this only appear when neccesary?
+                                    ScrollBars = RichTextBoxScrollBars.Vertical,
                                     MinimumSize = new Size(200, 80),
                                     //MaximumSize = new Size(200, int.MaxValue),
                                     ReadOnly = true,
+                                    Font = Control.DefaultFont,
                                     Text = blf.Data?.Trim('\n').Replace("\n", Environment.NewLine).Replace("\t", null) ?? ""
                                 };
                                 parent.Controls.Add(tb, column, GetRow());
@@ -456,6 +461,7 @@ namespace BrayconnsPatchingFramework.BoostersLab
                                         //if it is null, just use whatevers in the default
                                         Value = int.TryParse(blf.Data, out int i) ? i : 0,
                                         DecimalPlaces = 0,
+                                        Font = Control.DefaultFont,
                                     };
                                     nud.ValueChanged += (o, e) =>
                                     {
@@ -465,10 +471,11 @@ namespace BrayconnsPatchingFramework.BoostersLab
                                 }
                                 else
                                 {
-                                    var txt = new TextBox()
+                                    var txt = new RichTextBox()
                                     {
                                         Dock = DockStyle.Fill,
                                         Multiline = false,
+                                        Font = Control.DefaultFont,
                                         Text = blf.Data
                                     };
                                     txt.TextChanged += (o, e) =>
@@ -484,7 +491,9 @@ namespace BrayconnsPatchingFramework.BoostersLab
                                     var cb = new CheckBox()
                                     {
                                         AutoSize = true,
+                                        Anchor = AnchorStyles.None,
                                         Checked = blc.Checked,
+                                        Font = Control.DefaultFont,
                                         Text = blc.Name
                                     };
                                     cb.CheckedChanged += (o, e) => { blc.Checked = ((CheckBox)o).Checked; };
@@ -495,7 +504,9 @@ namespace BrayconnsPatchingFramework.BoostersLab
                                 var c = new CheckBox()
                                 {
                                     AutoSize = true,
+                                    Anchor = AnchorStyles.None,
                                     Checked = bool.TryParse(blf.Data, out bool b) ? b : false,
+                                    Font = Control.DefaultFont,
                                     Text = blf.Name
                                 };
                                 c.CheckedChanged += (o, e) => { blf.Data = ((CheckBox)o).Checked.ToString(); };
