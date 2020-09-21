@@ -365,13 +365,13 @@ namespace BPP
         private void ShowContextMenu(Point location, string path, bool enableOpenWith = true)
         {
             var cms = new ContextMenuStrip();
-            cms.Items.Add(new ToolStripMenuItem("Open", null, delegate { ShellOpener.Open(path); }));
+            cms.Items.Add(new ToolStripMenuItem(Dialog.Open, null, delegate { ShellOpener.Open(path); }));
             
             //TODO haven't figured out a way for Open With to work on non-windows platforms
             if (enableOpenWith && Environment.OSVersion.Platform == PlatformID.Win32NT)
-                cms.Items.Add(new ToolStripMenuItem("Open with", null, delegate { ShellOpener.OpenFileWith(path, this.Handle); }));
+                cms.Items.Add(new ToolStripMenuItem(Dialog.OpenWith, null, delegate { ShellOpener.OpenFileWith(path, this.Handle); }));
 
-            cms.Items.Add(new ToolStripMenuItem("Open path", null, delegate { ShellOpener.OpenPath(path); }));
+            cms.Items.Add(new ToolStripMenuItem(Dialog.OpenPath, null, delegate { ShellOpener.OpenPath(path); }));
             cms.Show(location);
         }
 

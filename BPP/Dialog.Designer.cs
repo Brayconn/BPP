@@ -218,11 +218,38 @@ namespace BPP {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open.
+        /// </summary>
+        internal static string Open {
+            get {
+                return ResourceManager.GetString("Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open path.
+        /// </summary>
+        internal static string OpenPath {
+            get {
+                return ResourceManager.GetString("OpenPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose what patch history file you&apos;d like to open....
         /// </summary>
         internal static string OpenTitle {
             get {
                 return ResourceManager.GetString("OpenTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open with.
+        /// </summary>
+        internal static string OpenWith {
+            get {
+                return ResourceManager.GetString("OpenWith", resourceCulture);
             }
         }
         

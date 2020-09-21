@@ -172,8 +172,17 @@ Would you like to use the address found in the executable?</value>
   <data name="InvalidOriginalEXE" xml:space="preserve">
     <value>Please pick an exe other than the one you've already patched...</value>
   </data>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="OpenPath" xml:space="preserve">
+    <value>Open path</value>
+  </data>
   <data name="OpenTitle" xml:space="preserve">
     <value>Choose what patch history file you'd like to open...</value>
+  </data>
+  <data name="OpenWith" xml:space="preserve">
+    <value>Open with</value>
   </data>
   <data name="PatchHistoryFilter" xml:space="preserve">
     <value>Patch History Files</value>
