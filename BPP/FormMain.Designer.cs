@@ -36,7 +36,7 @@
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.generatePatchHistoryFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.byGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.byEXEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.hackNamesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -108,7 +108,7 @@
             // viewToolStripMenuItem
             // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.byGameToolStripMenuItem,
+            this.byEXEToolStripMenuItem,
             this.byDirectoryToolStripMenuItem,
             this.toolStripSeparator1,
             this.hackNamesToolStripMenuItem,
@@ -116,11 +116,11 @@
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             resources.ApplyResources(this.viewToolStripMenuItem, "viewToolStripMenuItem");
             // 
-            // byGameToolStripMenuItem
+            // byEXEToolStripMenuItem
             // 
-            this.byGameToolStripMenuItem.Name = "byGameToolStripMenuItem";
-            resources.ApplyResources(this.byGameToolStripMenuItem, "byGameToolStripMenuItem");
-            this.byGameToolStripMenuItem.Click += new System.EventHandler(this.byGameToolStripMenuItem_Click);
+            this.byEXEToolStripMenuItem.Name = "byEXEToolStripMenuItem";
+            resources.ApplyResources(this.byEXEToolStripMenuItem, "byEXEToolStripMenuItem");
+            this.byEXEToolStripMenuItem.Click += new System.EventHandler(this.byEXEToolStripMenuItem_Click);
             // 
             // byDirectoryToolStripMenuItem
             // 
@@ -342,7 +342,7 @@
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem byDirectoryToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem byGameToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem byEXEToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem hackNamesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem hackFilenamesToolStripMenuItem;
     }

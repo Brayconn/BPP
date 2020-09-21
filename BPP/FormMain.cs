@@ -242,7 +242,7 @@ namespace BPP
             hackNamesToolStripMenuItem.Checked = FileDisplayMode == FileDisplayModes.Name;
             hackFilenamesToolStripMenuItem.Checked = FileDisplayMode == FileDisplayModes.Filename;
 
-            byGameToolStripMenuItem.Checked = TreeDisplayMode == TreeDisplayModes.Game;
+            byEXEToolStripMenuItem.Checked = TreeDisplayMode == TreeDisplayModes.EXE;
             byDirectoryToolStripMenuItem.Checked = TreeDisplayMode == TreeDisplayModes.Directory;
         }
 
@@ -268,7 +268,7 @@ namespace BPP
         
         enum TreeDisplayModes
         {
-            Game,
+            EXE,
             Directory
         }
         TreeDisplayModes tdm = TreeDisplayModes.Directory;
@@ -295,12 +295,12 @@ namespace BPP
                 var node = availableHacksTreeView.Nodes;
                 switch (TreeDisplayMode)
                 {
-                    case TreeDisplayModes.Game:
-                        string game = loadedHacks[i].EXE ?? Dialog.DefaultEXEDisplayName;
-                        if (!node.ContainsKey(game))
-                            node = node.Add(game, game).Nodes;
+                    case TreeDisplayModes.EXE:
+                        string exe = loadedHacks[i].EXE ?? Dialog.DefaultEXEDisplayName;
+                        if (!node.ContainsKey(exe))
+                            node = node.Add(exe, exe).Nodes;
                         else
-                            node = node[game].Nodes;
+                            node = node[exe].Nodes;
                         break;
                     case TreeDisplayModes.Directory:
                         for (int j = 0; j < hackPaths[i].Length - 1; j++)
@@ -423,8 +423,8 @@ namespace BPP
         {
             if(e.Button == MouseButtons.Right)
             {
-                //don't want to allow opening the context menu on games
-                if (e.Node.Nodes.Count > 0 && TreeDisplayMode == TreeDisplayModes.Game)
+                //don't want to allow opening the context menu on exes
+                if (e.Node.Nodes.Count > 0 && TreeDisplayMode == TreeDisplayModes.EXE)
                     return;
                 ShowContextMenu(availableHacksTreeView.PointToScreen(e.Location),GetHackFullPath(e.Node), e.Node.Nodes.Count == 0);
             }
@@ -432,7 +432,7 @@ namespace BPP
 
         private void availableHacksTreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            //Don't add games/folders to the list...
+            //Don't add exes/folders to the list...
             if (e.Node.Nodes.Count > 0)
                 return;
             AddHack(e.Node);
@@ -851,9 +851,9 @@ namespace BPP
             TreeDisplayMode = TreeDisplayModes.Directory;
         }
 
-        private void byGameToolStripMenuItem_Click(object sender, EventArgs e)
+        private void byEXEToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TreeDisplayMode = TreeDisplayModes.Game;
+            TreeDisplayMode = TreeDisplayModes.EXE;
         }
 
         private void hackNamesToolStripMenuItem_Click(object sender, EventArgs e)
