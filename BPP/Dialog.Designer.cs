@@ -191,6 +191,15 @@ namespace BPP {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to undo these hacks?.
+        /// </summary>
+        internal static string GetUndoConfirmation {
+            get {
+                return ResourceManager.GetString("GetUndoConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Some of the selected hacks collide!.
         /// </summary>
         internal static string HackCollisionWarning {
@@ -277,6 +286,15 @@ namespace BPP {
         internal static string UnableToLocateHack {
             get {
                 return ResourceManager.GetString("UnableToLocateHack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hacks undone successfully!.
+        /// </summary>
+        internal static string UndoSuccess {
+            get {
+                return ResourceManager.GetString("UndoSuccess", resourceCulture);
             }
         }
         

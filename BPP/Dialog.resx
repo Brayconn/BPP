@@ -163,6 +163,9 @@ Would you like to use the address found in the executable?</value>
     <value>Error while creating the editor form:
 {0}</value>
   </data>
+  <data name="GetUndoConfirmation" xml:space="preserve">
+    <value>Are you sure you want to undo these hacks?</value>
+  </data>
   <data name="HackCollisionWarning" xml:space="preserve">
     <value>Some of the selected hacks collide!</value>
   </data>
@@ -192,6 +195,9 @@ Would you like to use the address found in the executable?</value>
   </data>
   <data name="UnableToLocateHack" xml:space="preserve">
     <value>The hack couldn't be located!</value>
+  </data>
+  <data name="UndoSuccess" xml:space="preserve">
+    <value>Hacks undone successfully!</value>
   </data>
   <data name="WarningTitle" xml:space="preserve">
     <value>Warning</value>

@@ -679,10 +679,10 @@ namespace BPP
             string originalFile = GetOtherEXE();
             if (string.IsNullOrWhiteSpace(originalFile))
                 return;
-            if (MessageBox.Show("Are you sure you want to undo these hacks?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show(Dialog.GetUndoConfirmation, Dialog.WarningTitle, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 PatchApplier.UndoHacks(selectedEXE, originalFile, QueuedHackFootprints(), baseAddress);
-                MessageBox.Show("Hacks undone successfully!", this.Text);
+                MessageBox.Show(Dialog.UndoSuccess, this.Text);
             }
         }
 
