@@ -455,6 +455,7 @@ namespace BrayconnsPatchingFramework.BoostersLab
                                     var nud = new NumericUpDown()
                                     {
                                         AutoSize = true,
+                                        Anchor = AnchorStyles.Left | AnchorStyles.Right,
                                         Minimum = long.MinValue,
                                         Maximum = long.MaxValue,
                                         //use the Data if not null (which can only happen on loading a hack with no value there)
