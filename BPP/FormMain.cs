@@ -16,6 +16,7 @@ namespace BPP
         public FormMain(string hackFolder = null, string executable = null, ulong baseaddress = PatchApplier.DefaultBaseAddress, string loadFile = null)
         {
             InitializeComponent();
+            this.Text = $"{Title.BPP} - {(string)typeof(Title).GetProperty($"String{(new Random().Next(1, 41))}", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null)}";
             UpdateDisplayModeButtons();
 
             HackFolder = !string.IsNullOrWhiteSpace(hackFolder) ? hackFolder : Settings.Default.HackFolder;
@@ -644,7 +645,7 @@ namespace BPP
                     (!string.IsNullOrWhiteSpace(openedPatchHistory)
                     ? string.Format(Dialog.SaveOffer, openedPatchHistory)
                     : Dialog.CreateSaveOffer);
-                if (MessageBox.Show(confirmationText, this.Text, MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show(confirmationText, Title.BPP, MessageBoxButtons.YesNo) == DialogResult.Yes)
                     saveToolStripMenuItem_Click(sender, e);
             }
         }
@@ -685,7 +686,7 @@ namespace BPP
             if (MessageBox.Show(Dialog.GetUndoConfirmation, Dialog.WarningTitle, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 PatchApplier.UndoHacks(selectedEXE, originalFile, QueuedHackFootprints(), baseAddress);
-                MessageBox.Show(Dialog.UndoSuccess, this.Text);
+                MessageBox.Show(Dialog.UndoSuccess, Title.BPP);
             }
         }
 
@@ -719,7 +720,7 @@ namespace BPP
                 }
                 catch (ArgumentException ae)
                 {
-                    MessageBox.Show(ae.Message, this.Text);
+                    MessageBox.Show(ae.Message, Title.BPP);
                 }
             }
         }
@@ -844,7 +845,7 @@ namespace BPP
                 if(sfd.ShowDialog() == DialogResult.OK)
                 {
                     PatchApplier.SavePatchHistory(PatchApplier.GeneratePatchHistory(originalFile, selectedEXE), sfd.FileName);
-                    MessageBox.Show(Dialog.GeneratePatchHistorySuccess, this.Text);
+                    MessageBox.Show(Dialog.GeneratePatchHistorySuccess, Title.BPP);
                 }
             }
         }

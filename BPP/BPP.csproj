@@ -45,6 +45,11 @@
     <Compile Update="FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
+    <Compile Update="Title.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Title.resx</DependentUpon>
+    </Compile>
     <EmbeddedResource Update="Dialog.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Dialog.Designer.cs</LastGenOutput>
@@ -56,6 +61,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Title.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Title.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Compile Update="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

@@ -58,3 +58,4 @@ Mac/Linux you'll need [mono](https://www.mono-project.com/), and probably need t
 # Credits
 - Code - Brayconn<sup><sup>hi<sup/><sup/>
 - Booster's Lab + its xml format - [Noxid](https://github.com/taedixon)
+- Helped with the random titles - [Fliss](http://github.com/devfliss)
