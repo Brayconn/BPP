@@ -152,7 +152,9 @@ namespace BrayconnsPatchingFramework.BoostersLab
                 recognizeLongs = value;
                 void SetLongValue(object[] nodes)
                 {
-                    foreach(var node in Nodes)
+                    if (nodes == null)
+                        return;
+                    foreach(var node in nodes)
                     {
                         if (node is BoostersLabPanel blp)
                             SetLongValue(blp.Nodes);
