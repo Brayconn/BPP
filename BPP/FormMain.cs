@@ -478,7 +478,6 @@ namespace BPP
 
         #region Drag & Drop
 
-        bool isHolding = false;
         int startIndex = -1;
         int endIndex = -1;
 
@@ -491,6 +490,7 @@ namespace BPP
             return data.GetFormats().Select(x => data.GetData(x) as IHack).FirstOrDefault();
         }
 
+        Rectangle dragBox = Rectangle.Empty;
         private void queuedHacksListBox_MouseDown(object sender, MouseEventArgs e)
         {
             var clickedIndex = queuedHacksListBox.IndexFromPoint(e.Location);
@@ -498,9 +498,12 @@ namespace BPP
                 return;
             switch (e.Button)
             {
-                case MouseButtons.Left when !isHolding:
+                case MouseButtons.Left:
                     startIndex = clickedIndex;
-                    isHolding = true;
+                    dragBox = new Rectangle(new Point(
+                                        e.X - (SystemInformation.DragSize.Width / 2),
+                                        e.Y - (SystemInformation.DragSize.Height / 2)),
+                                        SystemInformation.DragSize);
                     break;
                 case MouseButtons.Right:
                     ShowContextMenu(queuedHacksListBox.PointToScreen(e.Location), GetHackFullPath(highlightedHack));
@@ -510,7 +513,7 @@ namespace BPP
 
         private void queuedHacksListBox_MouseMove(object sender, MouseEventArgs e)
         {
-            if (isHolding)
+            if (e.Button == MouseButtons.Left && dragBox != Rectangle.Empty && !dragBox.Contains(e.Location))
             {
                 queuedHacksListBox.SelectedIndex = startIndex;
                 endIndex = queuedHacksListBox.IndexFromPoint(e.Location);
@@ -521,7 +524,7 @@ namespace BPP
 
         private void queuedHacksListBox_MouseUp(object sender, MouseEventArgs e)
         {
-            isHolding = false;
+            dragBox = Rectangle.Empty;
         }
 
         private void queuedHacksListBox_DragEnter(object sender, DragEventArgs e)
@@ -564,9 +567,9 @@ namespace BPP
                 queuedHacksListBox.Items.Remove(hackToMove);
                 queuedHacksListBox.Items.Insert(index, hackToMove);
 
-                isHolding = false;
                 queuedHacksListBox.SelectedIndex = index;
             }
+            dragBox = Rectangle.Empty;
         }
 
         private void availableHacksTreeView_ItemDrag(object sender, ItemDragEventArgs e)
@@ -588,8 +591,8 @@ namespace BPP
             if (IsIHack(e.Data) && (e.AllowedEffect | DragDropEffects.Move) != 0)
             {
                 RemoveHack(GetAsIHack(e.Data));
-                isHolding = false;
             }
+            dragBox = Rectangle.Empty;
         }
 
         #endregion
