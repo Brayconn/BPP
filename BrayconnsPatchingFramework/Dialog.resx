@@ -120,11 +120,17 @@
   <data name="CaveStory" xml:space="preserve">
     <value>Cave Story</value>
   </data>
+  <data name="FixStreakingDescription" xml:space="preserve">
+    <value>Some larger hacks may streak when scrolling. If this is happening, use this option to fix it. Scrolling may become slower.</value>
+  </data>
   <data name="InvalidGame" xml:space="preserve">
     <value>Invalid Game!</value>
   </data>
   <data name="InvalidName" xml:space="preserve">
     <value>Invalid Name!</value>
+  </data>
+  <data name="RecognizeLongsDescription" xml:space="preserve">
+    <value>Booster's Lab doesn't actually recognize text fields with length 8 as numbers, they get treated as strings. Turning this option OFF will replicate that effect.</value>
   </data>
   <data name="UnavailableHack" xml:space="preserve">
     <value>Unavailable Hack: {0}</value>

@@ -8,6 +8,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Text;
+using LocalizeableComponentModel;
 
 namespace BrayconnsPatchingFramework.BoostersLab
 {
@@ -142,7 +143,7 @@ namespace BrayconnsPatchingFramework.BoostersLab
         [XmlIgnore]
         bool recognizeLongs = true;
         [XmlIgnore]
-        [DefaultValue(true), Description("Booster's Lab doesn't actually recognize text fields with length 8 as numbers, they get treated as strings. Turning this option OFF will replicate that effect.")]
+        [DefaultValue(true), LocalizeableDescription(nameof(Dialog.RecognizeLongsDescription), typeof(Dialog))]
         public bool RecognizeLongs
         {
             get => recognizeLongs;
@@ -324,7 +325,7 @@ namespace BrayconnsPatchingFramework.BoostersLab
         public bool WantsDefaultValues { get; private set; } = true;
         
         [XmlIgnore]
-        [DefaultValue(false), Description("Some larger hacks may streak when scrolling. If this is happening, use this option to fix it. Scrolling may become slower.")]
+        [DefaultValue(false), LocalizeableDescription(nameof(Dialog.FixStreakingDescription), typeof(Dialog))]
         public bool FixStreaking { get; set; }
         private class ExStyleForm : Form
         {

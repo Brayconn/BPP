@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrayconnsPatchingFramework"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PETools", "..\PETools\PETools\PETools.csproj", "{B3B5FCAC-3F15-4839-BB20-81DDF6047794}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalizeableComponentModel", "..\LocalizeableComponentModel\LocalizeableComponentModel\LocalizeableComponentModel.csproj", "{DD5B0807-A0BA-4732-BCE0-71F189995E68}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{B3B5FCAC-3F15-4839-BB20-81DDF6047794}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3B5FCAC-3F15-4839-BB20-81DDF6047794}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3B5FCAC-3F15-4839-BB20-81DDF6047794}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD5B0807-A0BA-4732-BCE0-71F189995E68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD5B0807-A0BA-4732-BCE0-71F189995E68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD5B0807-A0BA-4732-BCE0-71F189995E68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD5B0807-A0BA-4732-BCE0-71F189995E68}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

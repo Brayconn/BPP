@@ -70,6 +70,15 @@ namespace BrayconnsPatchingFramework {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Some larger hacks may streak when scrolling. If this is happening, use this option to fix it. Scrolling may become slower..
+        /// </summary>
+        internal static string FixStreakingDescription {
+            get {
+                return ResourceManager.GetString("FixStreakingDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid Game!.
         /// </summary>
         internal static string InvalidGame {
@@ -84,6 +93,15 @@ namespace BrayconnsPatchingFramework {
         internal static string InvalidName {
             get {
                 return ResourceManager.GetString("InvalidName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Booster&apos;s Lab doesn&apos;t actually recognize text fields with length 8 as numbers, they get treated as strings. Turning this option OFF will replicate that effect..
+        /// </summary>
+        internal static string RecognizeLongsDescription {
+            get {
+                return ResourceManager.GetString("RecognizeLongsDescription", resourceCulture);
             }
         }
         
