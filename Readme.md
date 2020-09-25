@@ -42,7 +42,7 @@ So no, your hacks are not magically expanding, it's just so you can better see w
 # Building
 It's just a regular VS2019 project, should build pretty normally.
 
-Requires my fork of the [PETools library](https://github.com/Brayconn/PETools)
+Requires [LocalizeableComponentModel](https://github.com/Brayconn/LocalizeableComponentModel), and my fork of the [PETools library](https://github.com/Brayconn/PETools)
 
 Uses these NuGet packages:
 - CommandLineParser - Parsing startup options
